@@ -37,6 +37,7 @@ void outputSort(student temp[AR_SIZE]);
 void outputToFile(student group[AR_SIZE]);
 void inputFromFile(student group[AR_SIZE]);
 void TxtToBin(student group[AR_SIZE]);
+void BinToBase(student group[AR_SIZE]);
 int check_digit(char*);
 
 int main()
@@ -137,6 +138,7 @@ void addData(student group[AR_SIZE]) {
     enum Num_of_commands {
         INPUTKLAV = 1,
         INPUTTEXT,
+        BINTOBASE,
         MAINMENU
     };
     int index_appData = 0;
@@ -152,7 +154,9 @@ void addData(student group[AR_SIZE]) {
     cout << "|-----|---------------------------------------|\n";
     cout << "|  2  |Ввод из текстового файла;              |\n";
     cout << "|-----|---------------------------------------|\n";
-    cout << "|  3  |Выход в главное меню;                  |\n";
+    cout << "|  3  |Ввод из бинарного файла;               |\n";
+    cout << "|-----|---------------------------------------|\n";
+    cout << "|  4  |Выход в главное меню;                  |\n";
     cout << "|-----|---------------------------------------|\n\n";
     outputDataTable(group);
     cout << "\n Введите нужный пункт меню: ";
@@ -163,6 +167,9 @@ void addData(student group[AR_SIZE]) {
         break;
     case INPUTTEXT:
         inputFromFile(group);
+        break;
+    case BINTOBASE:
+        BinToBase(group);
         break;
     case MAINMENU:
         main_menu(group);
@@ -851,8 +858,8 @@ void inputFromFile(student group[AR_SIZE]) {
             c++;
         }
         inf.close();
-        MessageBox(nullptr, TEXT("Запись из файла успешно выполнена!"), TEXT("Успех"), MB_OK);
         outputDataTable(group);
+        MessageBox(nullptr, TEXT("Запись из файла успешно выполнена!"), TEXT("Успех"), MB_OK);
         system("pause");
         cin.get();
         main_menu(group);
@@ -886,6 +893,44 @@ void TxtToBin(student group[AR_SIZE]) {
         out.close();
         in.close();
         MessageBox(nullptr, TEXT("Запись завершена!\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
+        main_menu(group);
+    }
+    else {
+        MessageBox(nullptr, TEXT("Ошибка! Не удалось открыть файл. Запись невозможна.\nВы возвращены в главное меню."), TEXT("Ошибка"), MB_OK);
+        main_menu(group);
+    }
+}
+
+void BinToBase(student group[AR_SIZE]) {
+    system("cls");
+    cout << "\n";
+    cout << "|=============================================|\n";
+    cout << "|-----------База данных студентов-------------|\n";
+    cout << "|=============================================|\n";
+    cout << "|--------Загрузка БД из бинарного файла-------|\n";
+    cout << "|---------------------------------------------|\n\n";
+    int n = AR_SIZE;
+    bool check = 0;
+    int stop = 0;
+    ifstream in("BASE_BIN.bin", ios::binary || ios::in);
+    if (in.is_open()) {
+
+        for (int i = 0; i < n; i++) {
+            student tm;
+            in.read((char*)&tm, sizeof(tm));
+            if (tm.family[0] == '\0') break;
+            strcpy_s(group[i].family, FAMILY_SIZE, tm.family);
+            strcpy_s(group[i].name, FAMILY_SIZE, tm.name);
+            strcpy_s(group[i].otch, FAMILY_SIZE, tm.otch);
+            group[i].kurs = tm.kurs;
+            group[i].grade.mat = tm.grade.mat;
+            group[i].grade.angeom = tm.grade.angeom;
+            group[i].grade.inzhgraph = tm.grade.inzhgraph;
+            group[i].grade.vp = tm.grade.vp;
+        }
+        in.close();
+        outputDataTable(group);
+        MessageBox(nullptr, TEXT("Загрузка БД из бинарного файла выполнена!\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
         main_menu(group);
     }
     else {
