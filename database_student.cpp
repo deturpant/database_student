@@ -38,6 +38,7 @@ void outputToFile(student group[AR_SIZE]);
 void inputFromFile(student group[AR_SIZE]);
 void TxtToBin(student group[AR_SIZE]);
 void BinToBase(student group[AR_SIZE]);
+void OtputTableFile(student group[AR_SIZE]);
 int check_digit(char*);
 
 int main()
@@ -57,6 +58,7 @@ void main_menu(student group[AR_SIZE]) {
         OUTPUT,
         REQUEST,
         BDTOBIN,
+        BDTABLETXT,
         EXIT
     };
     bool good_ind = 0;
@@ -81,7 +83,9 @@ void main_menu(student group[AR_SIZE]) {
     cout << "|-----|---------------------------------------|\n";
     cout << "|  7  |Перевод текстового файла БД в бинарный;|\n";
     cout << "|-----|---------------------------------------|\n";
-    cout << "|  8  |Выход;                                 |\n";
+    cout << "|  8  |Вывод БД в файл (таблицей);            |\n";
+    cout << "|-----|---------------------------------------|\n";
+    cout << "|  9  |Выход;                                 |\n";
     cout << "|-----|---------------------------------------|\n";
     cout << "\n";
     cout << " Введите нужный элемент меню: ";
@@ -112,6 +116,9 @@ void main_menu(student group[AR_SIZE]) {
         break;
     case BDTOBIN:
         TxtToBin(group);
+        break;
+    case BDTABLETXT:
+        OtputTableFile(group);
         break;
     case EXIT:
         system("cls");
@@ -805,7 +812,7 @@ void outputToFile(student group[AR_SIZE]) {
             fout << group[i].grade.vp << endl;
         }
         fout.close();
-        MessageBox(nullptr, TEXT("Запись в файл успешно выполнена!\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
+        MessageBox(nullptr, TEXT("Запись в файл успешно выполнена!\nИмя файла: BASE_STUDENT.txt\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
         main_menu(group);
     }
     else {
@@ -882,7 +889,7 @@ void TxtToBin(student group[AR_SIZE]) {
         }
         out.close();
         in.close();
-        MessageBox(nullptr, TEXT("Запись завершена!\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
+        MessageBox(nullptr, TEXT("Запись завершена!\nИмя файла: BASE_BIN.bin\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
         main_menu(group);
     }
     else {
@@ -937,4 +944,41 @@ int check_digit(char* str) {
         }
     }
     return 1;
+}
+
+
+void OtputTableFile(student group[AR_SIZE]) {
+    system("cls");
+    int Free{};
+    for (int i = 0; i < AR_SIZE; i++) {
+        if (group[i].kurs == 0) {
+            Free = i;
+            break;
+        }
+    }
+    cout << "\n";
+    cout << "|=============================================|\n";
+    cout << "|-----------База данных студентов-------------|\n";
+    cout << "|=============================================|\n";
+    cout << "|------Вывод данных в файл (таблицей)---------|\n";
+    cout << "|---------------------------------------------|\n\n";
+    if (Free != 0) {
+        ofstream fout;
+        fout.open("BASE_STUDENT_TABLE.txt");
+        fout << "|= ========================================================================================================== = | \n";
+        fout << "№ |" << setw(15) << "Фамилия |" << setw(15) << "Имя |" << setw(18) << "Отчество |" << setw(11) << "Курс |" << setw(12) << "Мат.Анализ |" << setw(12) << "Ан.Геом. |" << setw(12) << "Инж.Граф. |" << setw(12) << "Выс.Прог. |" << endl;
+        fout << "--|--------------|--------------|-----------------|----------|-----------|-----------|-----------|-----------|\n";
+        for (int i = 0; i < Free; i++) {
+            fout << i + 1 << " |" << setw(13) << group[i].family << " |" << setw(13) << group[i].name << " |" << setw(16) << group[i].otch << " |" << setw(9) << group[i].kurs << " |" << setw(10) << group[i].grade.mat << " |" << setw(10) << group[i].grade.angeom << " |" << setw(10) << group[i].grade.inzhgraph << " |" << setw(10) << group[i].grade.vp << " |" << endl;
+            fout << "--|--------------|--------------|-----------------|----------|-----------|-----------|-----------|-----------|\n";
+        }
+        fout << "|============================================================================================================|\n";
+        fout.close();
+        MessageBox(nullptr, TEXT("Запись в файл (таблицей) успешно выполнена!\nИмя файла: BASE_STUDENT_TABLE.txt\nВы возвращены в главное меню."), TEXT("Успех"), MB_OK);
+        main_menu(group);
+    }
+    else {
+        MessageBox(nullptr, TEXT("Ошибка! База данных пуста. Запись невозможна.\nВы возвращены в главное меню."), TEXT("Ошибка"), MB_OK);
+        main_menu(group);
+    }
 }
