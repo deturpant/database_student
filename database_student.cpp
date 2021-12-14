@@ -633,6 +633,7 @@ void Sort(student group[AR_SIZE]) {
         MessageBox(nullptr, TEXT("Ошибка! Введено неверное значение пункта удаления.\nВы возвращены назад."), TEXT("Ошибка"), MB_OK);
         DeleteData(group);
     }
+    int k = 0;
     switch (sort_index) {
     case FAMILY_SORT:
         temp = group;
@@ -642,6 +643,14 @@ void Sort(student group[AR_SIZE]) {
                     tmps[0] = temp[j];
                     temp[j] = temp[j - 1];
                     temp[j - 1] = tmps[0];
+                }
+                while (temp[j].family[k] == temp[j - 1].family[k]) {
+                    if (temp[j].family[k + 1] < temp[j - 1].family[k + 1]) {
+                        tmps[0] = temp[j];
+                        temp[j] = temp[j - 1];
+                        temp[j - 1] = tmps[0];
+                    }
+                    k++;
                 }
             }
         }
@@ -659,6 +668,14 @@ void Sort(student group[AR_SIZE]) {
                     temp[j] = temp[j - 1];
                     temp[j - 1] = tmps[0];
                 }
+                while (temp[j].name[k] == temp[j - 1].name[k]) {
+                    if (temp[j].name[k + 1] < temp[j - 1].name[k + 1]) {
+                        tmps[0] = temp[j];
+                        temp[j] = temp[j - 1];
+                        temp[j - 1] = tmps[0];
+                    }
+                    k++;
+                }
             }
         }
         system("cls");
@@ -675,6 +692,14 @@ void Sort(student group[AR_SIZE]) {
                     tmps[0] = temp[j];
                     temp[j] = temp[j - 1];
                     temp[j - 1] = tmps[0];
+                }
+                while (temp[j].otch[k] == temp[j - 1].otch[k]) {
+                    if (temp[j].otch[k + 1] < temp[j - 1].otch[k + 1]) {
+                        tmps[0] = temp[j];
+                        temp[j] = temp[j - 1];
+                        temp[j - 1] = tmps[0];
+                    }
+                    k++;
                 }
             }
         }
