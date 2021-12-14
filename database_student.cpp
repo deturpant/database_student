@@ -61,7 +61,6 @@ void main_menu(student group[AR_SIZE]) {
         BDTABLETXT,
         EXIT
     };
-    bool good_ind = 0;
     int ind_menu = 0;
     system("cls");
     cout << "\n";
